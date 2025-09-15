@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Register visitor</title>
+</head>
+<body>
+  <h1>Register</h1>
+  <form id="f">
+    <input id="name" required maxlength="200" placeholder="Your name" />
+    <button>Register</button>
+  </form>
+  <p id="msg"></p>
+  <script>
+  const API_URL = "https://flvisitor-gyf7ewhneeh9hpeg.swedencentral-01.azurewebsites.net/api/RegisterVisitor";
+  document.getElementById('f').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ name })
+    });
+    const out = await res.json().catch(()=>({}));
+    document.getElementById('msg').textContent =
+      res.ok ? (out.message || 'You are registered') : (out.error || 'Wrong');
+    if (res.ok) e.target.reset();
+  });
+  </script>
+</body>
+</html>
